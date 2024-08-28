@@ -198,5 +198,38 @@ namespace ShipItTest
                 Assert.IsTrue(e.Message.Contains(GTIN));
             }
         }
+
+        [Test]
+        public void TestOurOutboundOrderNumberOfTrucks()
+        {
+            onSetUp();
+            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() 
+                { 
+                    new StockAlteration(productId, 10)
+                });
+
+            var outboundOrder = new OutboundOrderRequestModel()
+            {
+                WarehouseId = WAREHOUSE_ID,
+                OrderLines = new List<OrderLine>()
+                {
+                    new OrderLine()
+                    {
+                        gtin = GTIN,
+                        quantity = 5
+                    },
+                }
+            };
+
+            try
+            {
+                int numberOfTrucks = outboundOrderController.Post(outboundOrder);
+                Assert.AreEqual(numberOfTrucks,1);
+            }
+            catch (ValidationException e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
     }
 }
