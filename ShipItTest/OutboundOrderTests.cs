@@ -200,12 +200,12 @@ namespace ShipItTest
         }
 
         [Test]
-        public void TestOurOutboundOrderNumberOfTrucks()
+        public void TestOurOutboundOrderNumberOfTrucksABitOver()
         {
             onSetUp();
             stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() 
                 { 
-                    new StockAlteration(productId, 10)
+                    new StockAlteration(productId, 300)
                 });
 
             var outboundOrder = new OutboundOrderRequestModel()
@@ -216,7 +216,7 @@ namespace ShipItTest
                     new OrderLine()
                     {
                         gtin = GTIN,
-                        quantity = 5
+                        quantity = 7
                     },
                 }
             };
@@ -224,7 +224,40 @@ namespace ShipItTest
             try
             {
                 int numberOfTrucks = outboundOrderController.Post(outboundOrder);
-                Assert.AreEqual(numberOfTrucks,1);
+                Assert.AreEqual(numberOfTrucks,2);
+            }
+            catch (ValidationException e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+                [Test]
+        public void TestOurOutboundOrderNumberOfTrucks()
+        {
+            onSetUp();
+            stockRepository.AddStock(WAREHOUSE_ID, new List<StockAlteration>() 
+                { 
+                    new StockAlteration(productId, 300)
+                });
+
+            var outboundOrder = new OutboundOrderRequestModel()
+            {
+                WarehouseId = WAREHOUSE_ID,
+                OrderLines = new List<OrderLine>()
+                {
+                    new OrderLine()
+                    {
+                        gtin = GTIN,
+                        quantity = 100
+                    },
+                }
+            };
+
+            try
+            {
+                int numberOfTrucks = outboundOrderController.Post(outboundOrder);
+                Assert.AreEqual(numberOfTrucks,15);
             }
             catch (ValidationException e)
             {
