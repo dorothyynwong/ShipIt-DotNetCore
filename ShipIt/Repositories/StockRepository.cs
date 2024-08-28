@@ -118,5 +118,24 @@ namespace ShipIt.Repositories
 
             base.RunTransaction(sql, parametersList);
         }
+
+        public IEnumerable<StockCompanyProductDataModel> GetStockCompanyProductByWarehouseId(int id)
+        {
+            // string sql = "SELECT p_id, hld, w_id FROM stock WHERE w_id = @w_id";
+            string sql = @"SELECT s.hld, gc.gcp_cd , gc.gln_nm, gc.gln_addr_02, gc.gln_addr_03, gc.gln_addr_04, 
+            gc.gln_addr_postalcode, gc.gln_addr_city, gc.contact_tel, gc.contact_mail, gt.l_th, gt.ds, gt.min_qt, 
+            gt.gtin_cd, gt.gtin_nm FROM stock AS s, 
+            gtin AS gt, gcp AS gc WHERE s.w_id = @w_id AND s.p_id = gt.p_id AND gt.gcp_cd = gc.gcp_cd";
+            var parameter = new NpgsqlParameter("@w_id", id);
+            string noProductWithIdErrorMessage = string.Format("No stock found with w_id: {0}", id);
+            try
+            {
+                return base.RunGetQuery(sql, reader => new StockDataModel(reader), noProductWithIdErrorMessage, parameter).ToList();
+            }
+            catch (NoSuchEntityException)
+            {
+                return new List<StockCompanyProductDataModel>();
+            }
+        }
     }
 }

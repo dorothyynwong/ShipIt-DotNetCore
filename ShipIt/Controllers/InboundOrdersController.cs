@@ -41,6 +41,15 @@ namespace ShipIt.Controllers
             Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
             foreach (var stock in allStock)
             {
+                //stock.held  s.hld
+                //All fields from company
+                //gc.gcp_cd , gc.gln_nm, gc.gln_addr_02, gc.gln_addr_03, gc.gln_addr_04
+                //gc.gln_addr_postalcode, gc.gln_addr_city, gc.contact_tel, gc.contact_mail
+                //product.LowerThreshold gt.l_th
+                //product.Discontinued gt.ds
+                //product.MinimumOrderQuantity gt.min_qt
+                //product.Gtin gt.gtin_cd
+                //product.Name gt.gtin_nm
                 Product product = new Product(_productRepository.GetProductById(stock.ProductId));
                 if(stock.held < product.LowerThreshold && !product.Discontinued)
                 {
