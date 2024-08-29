@@ -40,7 +40,7 @@ namespace ShipIt_DotNetCore
                 .ConfigureRunner(rb => rb
                     .AddPostgres()
                     .WithGlobalConnectionString(ConnectionHelper.GetConnectionString())
-                    .ScanIn(typeof(AddEmployeeId3).Assembly).For.Migrations())
+                    .ScanIn(typeof(AddEmployeeId4).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);
         }

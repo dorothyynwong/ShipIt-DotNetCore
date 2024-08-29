@@ -2,14 +2,14 @@ using FluentMigrator;
 
 namespace ShipIt.Migrations
 {
-    [Migration(20240829155100)]
-    public class AddEmployeeId3 : Migration
+    [Migration(20240829155800)]
+    public class AddEmployeeId4 : Migration
     {
         public override void Up()
         {
             Alter.Table("em").AddColumn("em_id").AsInt32().NotNullable().Identity();
             Delete.PrimaryKey("em_pkey").FromTable("em");
-            Alter.Table("em").AlterColumn("em_id").AsInt32().NotNullable().PrimaryKey();
+            Create.PrimaryKey("PK_em_id").OnTable("em").Columns("em_id");
         }
 
         public override void Down()
