@@ -23,26 +23,22 @@ namespace ShipIt.Models.DataModels
 
         public StockCompanyProductDataModel(IDataReader dataReader)
         {
-            if(dataReader.Read())
-            {
-                // dataReader.Read();
-                var dataRecord = (IDataRecord)dataReader;
-                this.StockHeld = (int)dataRecord[0];
-                this.Gcp = (string)dataRecord[1];
-                this.Name = (string)dataRecord[2];
-                this.Addr2 = (string)dataRecord[3];
-                this.Addr3 = (string)dataRecord[4];
-                this.Addr4 = (string)dataRecord[5];
-                this.PostalCode = (string)dataRecord[6];
-                this.City = (string)dataRecord[7];
-                this.Tel = (string)dataRecord[8];
-                this.Mail = (string)dataRecord[9];
-                this.LowerThreshold = (int)dataRecord[10];
-                this.Discontinued = (int)dataRecord[11];
-                this.MinimumOrderQuantity = (int)dataRecord[12];
-                this.Gtin = dataRecord[13].ToString();
-                this.ProductName = (string)dataRecord[14];
-            }
+            var dataRecord = (IDataRecord)dataReader;
+            this.StockHeld = (int)dataRecord[0];
+            this.Gcp = (string)dataRecord[1];
+            this.Name = (string)dataRecord[2];
+            this.Addr2 = (string)dataRecord[3];
+            this.Addr3 = (string)dataRecord[4];
+            this.Addr4 = (string)dataRecord[5];
+            this.PostalCode = (string)dataRecord[6];
+            this.City = (string)dataRecord[7];
+            this.Tel = (string)dataRecord[8];
+            this.Mail = (string)dataRecord[9];
+            this.LowerThreshold = (int)dataRecord[10];
+            this.Discontinued = (int)dataRecord[11];
+            this.MinimumOrderQuantity = (int)dataRecord[12];
+            this.Gtin = dataRecord[13].ToString();
+            this.ProductName = (string)dataRecord[14];
         }
         
         public StockCompanyProductDataModel() {}
