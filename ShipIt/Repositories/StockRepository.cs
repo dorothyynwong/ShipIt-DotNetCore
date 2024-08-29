@@ -17,6 +17,7 @@ namespace ShipIt.Repositories
         Dictionary<int, StockDataModel> GetStockByWarehouseAndProductIds(int warehouseId, List<int> productIds);
         void RemoveStock(int warehouseId, List<StockAlteration> lineItems);
         void AddStock(int warehouseId, List<StockAlteration> lineItems);
+        IEnumerable<StockCompanyProductDataModel> GetStockCompanyProductByWarehouseId(int id);
     }
 
     public class StockRepository : RepositoryBase, IStockRepository
@@ -130,7 +131,7 @@ namespace ShipIt.Repositories
             string noProductWithIdErrorMessage = string.Format("No stock found with w_id: {0}", id);
             try
             {
-                return base.RunGetQuery(sql, reader => new StockDataModel(reader), noProductWithIdErrorMessage, parameter).ToList();
+                return base.RunGetQuery(sql, reader => new StockCompanyProductDataModel(reader), noProductWithIdErrorMessage, parameter).ToList();
             }
             catch (NoSuchEntityException)
             {

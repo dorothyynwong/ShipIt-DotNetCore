@@ -36,7 +36,8 @@ namespace ShipIt.Controllers
 
             Log.Debug(String.Format("Found operations manager: {0}", operationsManager));
 
-            var allStock = _stockRepository.GetStockByWarehouseId(warehouseId);
+            // var allStock = _stockRepository.GetStockByWarehouseId(warehouseId);
+            var allStock = _stockRepository.GetStockCompanyProductByWarehouseId(warehouseId);
 
             Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
             foreach (var stock in allStock)
@@ -50,12 +51,26 @@ namespace ShipIt.Controllers
                 //product.MinimumOrderQuantity gt.min_qt
                 //product.Gtin gt.gtin_cd
                 //product.Name gt.gtin_nm
-                Product product = new Product(_productRepository.GetProductById(stock.ProductId));
-                if(stock.held < product.LowerThreshold && !product.Discontinued)
+                // Product product = new Product(_productRepository.GetProductById(stock.ProductId));
+                // if(stock.held < product.LowerThreshold && !product.Discontinued)
+                if(stock.StockHeld < stock.LowerThreshold && stock.Discontinued==0)
                 {
-                    Company company = new Company(_companyRepository.GetCompany(product.Gcp));
+                    // Company company = new Company(_companyRepository.GetCompany(product.Gcp));
 
-                    var orderQuantity = Math.Max(product.LowerThreshold * 3 - stock.held, product.MinimumOrderQuantity);
+                    Company company = new Company(
+                        stock.Gcp,
+                        stock.Name,
+                        stock.Addr2,
+                        stock.Addr3,
+                        stock.Addr4,
+                        stock.PostalCode,
+                        stock.City,
+                        stock.Tel,
+                        stock.Mail
+                    );
+
+                    //var orderQuantity = Math.Max(product.LowerThreshold * 3 - stock.held, product.MinimumOrderQuantity);
+                    var orderQuantity = Math.Max(stock.LowerThreshold * 3 - stock.StockHeld, stock.MinimumOrderQuantity);
 
                     if (!orderlinesByCompany.ContainsKey(company))
                     {
@@ -65,8 +80,8 @@ namespace ShipIt.Controllers
                     orderlinesByCompany[company].Add( 
                         new InboundOrderLine()
                         {
-                            gtin = product.Gtin,
-                            name = product.Name,
+                            gtin = stock.Gtin,
+                            name = stock.ProductName,
                             quantity = orderQuantity
                         });
                 }
