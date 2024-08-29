@@ -122,7 +122,6 @@ namespace ShipIt.Repositories
 
         public IEnumerable<StockCompanyProductDataModel> GetStockCompanyProductByWarehouseId(int id)
         {
-            // string sql = "SELECT p_id, hld, w_id FROM stock WHERE w_id = @w_id";
             string sql = @"SELECT s.hld, gc.gcp_cd , gc.gln_nm, gc.gln_addr_02, gc.gln_addr_03, gc.gln_addr_04, 
             gc.gln_addr_postalcode, gc.gln_addr_city, gc.contact_tel, gc.contact_mail, gt.l_th, gt.ds, gt.min_qt, 
             gt.gtin_cd, gt.gtin_nm FROM stock AS s, 
