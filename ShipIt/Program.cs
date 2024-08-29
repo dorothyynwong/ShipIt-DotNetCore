@@ -1,5 +1,10 @@
+using System;
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShipIt.Migrations;
+using ShipIt.Repositories;
 
 namespace ShipIt_DotNetCore
 {
@@ -9,6 +14,13 @@ namespace ShipIt_DotNetCore
         {
             DotNetEnv.Env.Load();
             CreateHostBuilder(args).Build().Run();
+            using (var serviceProvider = CreateServices())
+            using (var scope = serviceProvider.CreateScope())
+            {
+                // Put the database update into a scope to ensure
+                // that all resources will be disposed.
+                UpdateDatabase(scope.ServiceProvider);
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -17,5 +29,27 @@ namespace ShipIt_DotNetCore
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+
+        private static ServiceProvider CreateServices()
+        {
+            return new ServiceCollection()
+                .AddFluentMigratorCore()
+                .ConfigureRunner(rb => rb
+                    .AddPostgres()
+                    .WithGlobalConnectionString(ConnectionHelper.GetConnectionString())
+                    .ScanIn(typeof(AddEmployeeId).Assembly).For.Migrations())
+                .AddLogging(lb => lb.AddFluentMigratorConsole())
+                .BuildServiceProvider(false);
+        }
+
+        private static void UpdateDatabase(IServiceProvider serviceProvider)
+        {
+            // Instantiate the runner
+            var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+
+            // Execute the migrations
+            runner.MigrateUp();
+        }
     }
 }
