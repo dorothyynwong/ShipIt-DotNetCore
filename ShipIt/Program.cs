@@ -13,7 +13,7 @@ namespace ShipIt_DotNetCore
         public static void Main(string[] args)
         {
             DotNetEnv.Env.Load();
-            CreateHostBuilder(args).Build().Run();
+            
             using (var serviceProvider = CreateServices())
             using (var scope = serviceProvider.CreateScope())
             {
@@ -21,6 +21,8 @@ namespace ShipIt_DotNetCore
                 // that all resources will be disposed.
                 UpdateDatabase(scope.ServiceProvider);
             }
+
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -38,7 +40,7 @@ namespace ShipIt_DotNetCore
                 .ConfigureRunner(rb => rb
                     .AddPostgres()
                     .WithGlobalConnectionString(ConnectionHelper.GetConnectionString())
-                    .ScanIn(typeof(AddEmployeeId).Assembly).For.Migrations())
+                    .ScanIn(typeof(AddEmployeeId3).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);
         }

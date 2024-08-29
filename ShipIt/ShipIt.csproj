@@ -14,9 +14,10 @@
       <PackageReference Include="DotNetEnv" Version="1.4.0" />
       <PackageReference Include="FluentMigrator" Version="5.2.0" />
       <PackageReference Include="FluentMigrator.Runner" Version="5.2.0" />
+      <PackageReference Include="FluentMigrator.Runner.Postgres" Version="5.2.0" />
       <PackageReference Include="log4net" Version="2.0.9" />
       <PackageReference Include="Npgsql" Version="4.1.4" />
-      <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+      <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>

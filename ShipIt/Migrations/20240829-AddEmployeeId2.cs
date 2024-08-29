@@ -2,8 +2,8 @@ using FluentMigrator;
 
 namespace ShipIt.Migrations
 {
-    [Migration(20240829142900)]
-    public class AddEmployeeId : Migration
+    [Migration(20240829154900)]
+    public class AddEmployeeId2 : Migration
     {
         public override void Up()
         {
