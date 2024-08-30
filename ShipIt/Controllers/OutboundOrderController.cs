@@ -49,8 +49,8 @@ namespace ShipIt.Controllers
 
             foreach (var orderLine in request.OrderLines)
             {
-                //define array of products of a truck
                 List<int> productsInTruck = new List<int>{};
+
                 double truckWeight = 0;
                 if (!products.ContainsKey(orderLine.gtin))
                 {
@@ -63,9 +63,13 @@ namespace ShipIt.Controllers
                     productIds.Add(product.Id);
                     productsInTruck.Add(product.Id);
 
-                    
                     var productWeight = _productRepository.GetProductByGtin(orderLine.gtin).Weight;
                     truckWeight += productWeight * orderLine.quantity;
+                    if (truckWeight > 2000) 
+                    {
+                        truckWeight = productWeight * orderLine.quantity; //new truck weight
+                    }
+
                     totalWeight += productWeight * orderLine.quantity;
                 }
             }
