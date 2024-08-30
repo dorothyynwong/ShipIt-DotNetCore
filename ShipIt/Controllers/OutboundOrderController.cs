@@ -44,9 +44,14 @@ namespace ShipIt.Controllers
             var productIds = new List<int>();
             var errors = new List<string>();
             double totalWeight = 0;
+            //define array of array
+            
 
             foreach (var orderLine in request.OrderLines)
             {
+                //define array of products of a truck
+                List<int> productsInTruck = new List<int>{};
+                double truckWeight = 0;
                 if (!products.ContainsKey(orderLine.gtin))
                 {
                     errors.Add(string.Format("Unknown product gtin: {0}", orderLine.gtin));
@@ -56,8 +61,11 @@ namespace ShipIt.Controllers
                     var product = products[orderLine.gtin];
                     lineItems.Add(new StockAlteration(product.Id, orderLine.quantity));
                     productIds.Add(product.Id);
+                    productsInTruck.Add(product.Id);
+
                     
                     var productWeight = _productRepository.GetProductByGtin(orderLine.gtin).Weight;
+                    truckWeight += productWeight * orderLine.quantity;
                     totalWeight += productWeight * orderLine.quantity;
                 }
             }
@@ -96,6 +104,17 @@ namespace ShipIt.Controllers
             {
                 throw new InsufficientStockException(string.Join("; ", errors));
             }
+
+            //empty array of array, where each array is a truck
+            //loop through the stocks need to be loaded
+            //truck capacity = 0
+            //truck = []
+            //when truck capacity is not full
+            //truck capacity += weight
+            //truck append items
+            //when truck full
+            //truck array added to array of array
+            //truck and truck capacity resets
 
             _stockRepository.RemoveStock(request.WarehouseId, lineItems);
             return Convert.ToInt32(Math.Ceiling((double)totalWeight/2000));
