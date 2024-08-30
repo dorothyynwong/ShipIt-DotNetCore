@@ -25,6 +25,7 @@ namespace ShipIt.Models.DataModels
 
         public EmployeeDataModel(Employee employee)
         {
+            this.Id = employee.Id;
             this.Name = employee.Name;
             this.WarehouseId = employee.WarehouseId;
             this.Role = MapApiRoleToDatabaseRole(employee.role);
